@@ -26,22 +26,18 @@ def grafik_kx_ky_F(x, y, k, q, z):
     k_x_y = fftfreq(N, T)
     k_z = k_x_y * 1j
     for i in range(len(k_z)):
-        if k ** 2 - k_x_y[i] ** 2 - k_x_y[i] ** 2 < 0:
-            k_z[i] = 1j * cmath.sqrt(k ** 2 - k_x_y[i] ** 2 - k_x_y[i] ** 2).imag
-        else:
-            k_z[i] = cmath.sqrt(k ** 2 - k_x_y[i] ** 2 - k_x_y[i] ** 2).real
-    F = fft2(U)
-    F_new = F * np.exp(1j * k_x_y * z)
+        k_z[i] = cmath.sqrt(k ** 2 - k_x_y[i] ** 2 - k_x_y[i] ** 2)
+    F = fft2(U) * np.exp(1j * k_z * z)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(abs(k_x_y), abs(k_x_y), 1.0 / N * np.abs(F_new))
+    ax.plot_surface(abs(k_x_y), abs(k_x_y), 1.0 / N * np.abs(F))
     ax.set_xlabel("|kx|")
     ax.set_ylabel("|ky|")
     ax.set_zlabel("Fourie")
-    #ax.plot_surface(X, Y, np.abs(ifft2(F)))
-    #ax.set_xlabel("X")
-    #ax.set_ylabel("Y")
-    #ax.set_zlabel("U")
+    # ax.plot_surface(X, Y, np.abs(ifft2(F)))
+    # ax.set_xlabel("X")
+    # ax.set_ylabel("Y")
+    # ax.set_zlabel("U")
     plt.show()
 
 
@@ -53,9 +49,9 @@ def main():
     lambda_ = (2 * math.pi) / k  # в см
     x = np.arange(-10, 10.01, 0.01)
     y = np.arange(-10, 10.01, 0.01)
-    z = 10  # в см
-    q = - (math.pi * (w ** 2)) / (1j * lambda_) + z  # R(z=0) → ∞
-    #grafik_abs_U_X_Y(x, y, k, q)
+    z = 100  # в см
+    q = 1j * ((math.pi * (w ** 2)) / lambda_) + z  # R(z=0) → ∞
+    # grafik_abs_U_X_Y(x, y, k, q)
     grafik_kx_ky_F(x, y, k, q, z)
 
 
