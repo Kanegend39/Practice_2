@@ -17,18 +17,20 @@ N_1 = math.sqrt(epsilon_1 - ((k_x ** 2) / (k_0 ** 2)))
 N_2 = math.sqrt(epsilon_2 - ((k_x ** 2) / (k_0 ** 2)))
 N_3 = math.sqrt(epsilon_3 - ((k_x ** 2) / (k_0 ** 2)))
 phi_2 = cmath.exp(1j * N_2 * k_0 * d_2)
-M_21_s = [(N_2 + N_1) / (2 * N_2), (N_2 - N_1) / (2 * N_2),  # transfer matrix, s - polarization
-          (N_2 - N_1) / (2 * N_2), (N_2 + N_1) / (2 * N_2)]
-M_21_p = [(epsilon_1 * N_2 + epsilon_2 * N_1) / (2 * N_2 * n_2 * n_1),  # transfer matrix, p - polarization
-          (epsilon_1 * N_2 - epsilon_2 * N_1) / (2 * N_2 * n_2 * n_1),
-          (epsilon_1 * N_2 - epsilon_2 * N_1) / (2 * N_2 * n_2 * n_1),
-          (epsilon_1 * N_2 + epsilon_2 * N_1) / (2 * N_2 * n_2 * n_1)]
-M_32_s = [(N_3 + N_2) / (2 * N_3), (N_3 - N_2) / (2 * N_3),  # transfer matrix, s - polarization
-          (N_3 - N_2) / (2 * N_3), (N_3 + N_2) / (2 * N_3)]
-M_32_p = [(epsilon_2 * N_3 + epsilon_3 * N_2) / (2 * N_3 * n_3 * n_2),  # transfer matrix, p - polarization
-          (epsilon_2 * N_3 - epsilon_3 * N_2) / (2 * N_3 * n_3 * n_2),
-          (epsilon_2 * N_3 - epsilon_3 * N_2) / (2 * N_3 * n_3 * n_2),
-          (epsilon_2 * N_3 + epsilon_3 * N_2) / (2 * N_3 * n_3 * n_2)]
+M_21_s = [(N_2 + N_1) / (2 * N_2), (N_1 - N_2) / (2 * N_2),  # transfer matrix, s - polarization
+          (N_1 - N_2) / (2 * N_2), (N_2 + N_1) / (2 * N_2)]
+M_21_p = [((epsilon_1 * N_2 + epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2,
+          # transfer matrix, p - polarization
+          ((epsilon_1 * N_2 - epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2,
+          ((epsilon_1 * N_2 - epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2,
+          ((epsilon_1 * N_2 + epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2]
+M_32_s = [(N_3 + N_2) / (2 * N_3), (N_2 - N_3) / (2 * N_3),  # transfer matrix, s - polarization
+          (N_2 - N_3) / (2 * N_3), (N_3 + N_2) / (2 * N_3)]
+M_32_p = [((epsilon_2 * N_3 + epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3,
+          # transfer matrix, p - polarization
+          ((epsilon_2 * N_3 - epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3,
+          ((epsilon_2 * N_3 - epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3,
+          ((epsilon_2 * N_3 + epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3]
 PHI_2 = [phi_2, 0, 0, phi_2 ** (-1)]  # propagation matrix
 A_s = [M_32_s[0] * PHI_2[0] + M_32_s[1] * PHI_2[2], M_32_s[0] * PHI_2[2] + M_32_s[1] * PHI_2[3],
        M_32_s[2] * PHI_2[0] + M_32_s[3] * PHI_2[2], M_32_s[2] * PHI_2[2] + M_32_s[3] * PHI_2[3]]  # M32 * PHI2
@@ -46,7 +48,13 @@ print(R_p, R_s)
 print(T_p, T_s)
 print(R_p.real, T_p.real)
 print(R_s.real, T_s.real)
-#(0.820406304605871+0.1438778225369187j) (-0.8215540897979996-0.14363824110227494j)
-#(0.6196170777085491-0.19050196798767824j) (0.6181612905403462-0.1908993433183326j)
-#0.820406304605871 0.6196170777085491
-#-0.8215540897979996 0.6181612905403462
+a = (N_1 + N_2) * (N_2 - N_3) * cmath.exp(1j * N_2 * k_0 * d_2) + (N_1 - N_2) * (N_2 + N_3) * cmath.exp(
+    -1j * N_2 * k_0 * d_2)
+b = (N_1 - N_2) * (N_2 - N_3) * cmath.exp(1j * N_2 * k_0 * d_2) + (N_1 + N_2) * (N_2 + N_3) * cmath.exp(
+    -1j * N_2 * k_0 * d_2)
+print(-(a / b))
+c = (epsilon_2 * N_3 - epsilon_3 * N_2) * (epsilon_1 * N_2 + epsilon_2 * N_1) * cmath.exp(1j * N_2 * k_0 * d_2) + (
+        epsilon_2 * N_3 + epsilon_3 * N_2) * (epsilon_1 * N_2 - epsilon_2 * N_1) * cmath.exp(-1j * N_2 * k_0 * d_2)
+d = (epsilon_2 * N_3 - epsilon_3 * N_2) * (epsilon_1 * N_2 - epsilon_2 * N_1) * cmath.exp(1j * N_2 * k_0 * d_2) + (
+        epsilon_2 * N_3 + epsilon_3 * N_2) * (epsilon_1 * N_2 + epsilon_2 * N_1) * cmath.exp(-1j * N_2 * k_0 * d_2)
+print(-(c / d))
