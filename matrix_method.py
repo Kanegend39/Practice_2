@@ -9,10 +9,10 @@ def matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha):
     n_3 = np.sqrt(epsilon_3)
     c = 3 * 1e10
     k_0 = (2 * math.pi * f) / c
-    k_x = k_0 * np.sin(abs(alpha))
-    N_1 = np.sqrt(epsilon_1 - ((k_x ** 2) / (k_0 ** 2)))
-    N_2 = np.sqrt(epsilon_2 - ((k_x ** 2) / (k_0 ** 2)))
-    N_3 = np.sqrt(epsilon_3 - ((k_x ** 2) / (k_0 ** 2)))
+    k_x = k_0 * alpha
+    N_1 = np.sqrt(epsilon_1 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
+    N_2 = np.sqrt(epsilon_2 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
+    N_3 = np.sqrt(epsilon_3 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
     phi_2 = np.exp(1j * N_2 * k_0 * d_2)
     M_21_s = np.array([(N_2 + N_1) / (2 * N_2), (N_1 - N_2) / (2 * N_2),  # transfer matrix, s - polarization
                        (N_1 - N_2) / (2 * N_2), (N_2 + N_1) / (2 * N_2)])

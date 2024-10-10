@@ -1,21 +1,21 @@
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.fft import fft2, fftfreq, ifft2
 
 
-def decomposition(U0, N, T, k):
-    k_x_y = fftfreq(N, T)
-    k_z = np.empty((len(k_x_y), len(k_x_y)), dtype='complex64')
+def decomposition(U0, x, y, k):
+    fx = fftfreq(len(x), d=x[1] - x[0])
+    fy = fftfreq(len(y), d=y[1] - y[0])
+    FX, FY = np.meshgrid(fx, fy)
     E = fft2(U0)
-    for i in range(len(k_x_y)):
-        for j in range(len(k_x_y)):
-            if k ** 2 >= k_x_y[i] ** 2 + k_x_y[j] ** 2:
-                k_z[i][j] = math.sqrt(k ** 2 - (k_x_y[j] ** 2) - (k_x_y[i] ** 2))
-            else:
-                k_z[i][j] = 1j * math.sqrt(- (k ** 2) + (k_x_y[j] ** 2) + (k_x_y[i] ** 2))
-    return E, k_x_y, k_z
+    k_x = 2 * math.pi * FX
+    k_y = 2 * math.pi * FY
+    k_z = np.where(k ** 2 >= k_x ** 2 + k_y ** 2, np.sqrt(k ** 2 - k_x ** 2 - k_y ** 2, dtype='complex64'),
+                   1j * np.sqrt(k_x ** 2 + k_y ** 2 - k ** 2, dtype='complex64'))
+    return E, k_x, k_y, k_z
 
 
-def folding(J, N, T, k_z, z):
-    R = J * np.exp(1j * N * T * (math.pi / 5) * math.pi * k_z * z)
+def folding(J, k_z, z):
+    R = J * np.exp(1j * k_z * z)
     return ifft2(R)
