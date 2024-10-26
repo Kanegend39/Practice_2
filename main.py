@@ -1,26 +1,27 @@
 # by Kanegend :)
 import math
-import cmath
-import numpy as np
-import gaussian_decomposition
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+import gaussian_decomposition
 from matrix_method import matrix_method
 
 # CONSTANTS #
 c = 3 * 1e10  # cm/s
 f = 170 * 1e9  # Gh
-w = 0.5  # cm
+w = 1  # cm
 k0 = (2 * math.pi * f) / c  # cm^-1
 lambda_ = c / f  # cm
 epsilon_1 = 1  # dielectric permittivity
 epsilon_2 = 12
 epsilon_3 = 1
-tetta = 0.2  # angle between the horizontal axis and the plate
+tetta = (math.pi / 2) - 1.47  # angle between the horizontal axis and the plate
 d_2 = 0.0675  # layer diameter in cm
 
 # GAUSSIAN BEAM
-x = np.arange(-5, 5, 0.01)
-y = np.arange(-5, 5, 0.01)
+x = np.arange(-50, 50, 0.2)
+y = np.arange(-50, 50, 0.2)
 N = 1000  # total number of points
 T = 0.01  # step
 z = 10  # cm
@@ -49,7 +50,6 @@ for i in range(len(k_x)):
                     np.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2) * np.sqrt(
                 k_x[i][j] ** 2 + k_y[i][j] ** 2 + k_z[i][j] ** 2))
             alpha = np.sqrt(1 - cos_alpha ** 2)
-            print(alpha)
         else:
             alpha = k_x[i][j] / k0
         T_p[i][j] = matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha)[0]
@@ -71,8 +71,9 @@ ax = fig.add_subplot(111, projection='3d')
 ax.set_xlabel("X")
 ax.set_ylabel("Y")
 ax.set_zlabel("U")
-#ax.plot_surface(X, Y, abs(U1))
+# ax.plot_surface(X, Y, abs(U1))
 ax.plot_surface(X, Y, abs(U), color='orange')
+# ax.plot_surface(X, Y, abs(F), color='blue')
 ax.plot_surface(X, Y, abs(F), color='green')
 print(sum(sum(abs(U1) ** 2)), sum(sum(abs(U) ** 2)), sum(sum(abs(F) ** 2)))
 plt.show()
