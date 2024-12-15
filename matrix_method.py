@@ -1,5 +1,3 @@
-import math
-import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -8,7 +6,7 @@ def matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha):
     n_2 = np.sqrt(epsilon_2)
     n_3 = np.sqrt(epsilon_3)
     c = 3 * 1e10
-    k_0 = (2 * math.pi * f) / c
+    k_0 = (2 * np.pi * f) / c
     k_x = k_0 * alpha
     N_1 = np.sqrt(epsilon_1 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
     N_2 = np.sqrt(epsilon_2 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
@@ -42,11 +40,3 @@ def matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha):
     T_p = Tw_p[0] + R_p * Tw_p[1]
     T_s = Tw_s[0] + R_s * Tw_s[1]
     return T_p, R_p, T_s, R_s
-    # plt.plot(alpha, abs(R_p) ** 2, color='blue', label='p - polarization')
-    # plt.plot(alpha, abs(R_s) ** 2, color='green', label='s - polarization')
-    # plt.plot(alpha, abs(T_p) ** 2, color='blue', label='p - polarization')
-    # plt.plot(alpha, abs(T_s) ** 2, color='green', label='s - polarization')
-    # plt.legend(loc='best')
-    # plt.xlabel('alpha')
-    # plt.ylabel('|R|²')
-    # plt.show()

@@ -1,123 +1,147 @@
-# by Kanegend :)
-import math
+import sys
+from PyQt6 import QtWidgets
+from PyQt6 import uic
 
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy.fft import fft2, fftfreq, ifft2
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
+from the_first_task import gaussian_beam_propagation_no_vector
+from the_second_task import gaussian_beam_propagation_vector
 
-import gaussian_decomposition
-from matrix_method import matrix_method
+
+class MainWindow(QtWidgets.QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("main_window.ui", self)
+        self.canvas = MplCanvas_3D(self, width=10, height=8, dpi=100)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+        self.form_for_tools.addWidget(self.toolbar)
+        self.form_for_graph.addWidget(self.canvas)
+        self.build_graph.clicked.connect(self.button)
+        self.flag = False
+        self.vector.currentTextChanged.connect(self.change)
+
+    def change(self):
+        if self.flag is False:
+            self.angle.setEnabled(False)
+            self.angle.setValue(0.0)
+            self.graph_axis.clear()
+            new_items = ["Transmitted field on x-axis", "Transmitted field on y-axis",
+                         "Transmitted field on z-axis", "Reflected field on x-axis",
+                         "Reflected field on y-axis", "Reflected field on z-axis",
+                         "Initial field on x-axis", "Initial field on y-axis", "Initial field on z-axis"]
+            self.graph_axis.addItems(new_items)
+            self.flag = True
+        else:
+            self.angle.setEnabled(True)
+            self.graph_axis.clear()
+            new_items = ["Transmitted field (p - polarization)", "Transmitted field (s - polarization)",
+                         "Reflected field (p - polarization)", "Reflected field (s - polarization)",
+                         "Initial field"]
+            self.graph_axis.addItems(new_items)
+            self.flag = False
+
+    def button(self):
+        if self.vector.currentText() == "Do not consider the vector nature of the field":
+            self.no_vector()
+        else:
+            self.yes_vector()
+
+    def yes_vector(self):
+        left = self.left_border.value()
+        right = self.right_border.value()
+        step = self.step.value()
+        z = self.distance.value()
+        w = self.wave_waist.value()
+        d = self.plate_thickness.value()
+        X, Y, E_x, E_y, E_z, E_x_T_, E_y_T_, E_z_T_, E_x_R_, E_y_R_, E_z_R_ = gaussian_beam_propagation_vector(left,
+                                                                                                               right,
+                                                                                                               step,
+                                                                                                               z, w,
+                                                                                                               d)
+        self.create_graphs_2(X, Y, E_x, E_y, E_z, E_x_T_, E_y_T_, E_z_T_, E_x_R_, E_y_R_, E_z_R_, z)
+
+    def no_vector(self):
+        left = self.left_border.value()
+        right = self.right_border.value()
+        step = self.step.value()
+        z = self.distance.value()
+        w = self.wave_waist.value()
+        d = self.plate_thickness.value()
+        tetta = self.angle.value()
+        X, Y, U0_x_y, U_x_y_T_p, U_x_y_T_s, U_x_y_R_p, U_x_y_R_s = gaussian_beam_propagation_no_vector(left, right,
+                                                                                                       step, z, w,
+                                                                                                       tetta, d)
+        self.create_graphs_1(X, Y, U0_x_y, U_x_y_T_p, U_x_y_T_s, U_x_y_R_p, U_x_y_R_s, z)
+
+    def create_graphs_2(self, X, Y, E_x, E_y, E_z, E_x_T_, E_y_T_, E_z_T_, E_x_R_, E_y_R_, E_z_R_, z):
+        self.canvas.axes.cla()
+        colormap = 'inferno'
+        if z == 0 or self.graph_axis.currentText() == "Initial field on x-axis":
+            self.canvas.axes.plot_surface(X, Y, abs(E_x), cmap=colormap)
+            self.canvas.axes.set_zlabel("Ex")
+        else:
+            if self.graph_axis.currentText() == "Initial field on y-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_y), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ey")
+            elif self.graph_axis.currentText() == "Initial field on z-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_z), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ez")
+            elif self.graph_axis.currentText() == "Transmitted field on x-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_x_T_), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ex")
+            elif self.graph_axis.currentText() == "Transmitted field on y-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_y_T_), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ey")
+            elif self.graph_axis.currentText() == "Transmitted field on z-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_z_T_), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ez")
+            elif self.graph_axis.currentText() == "Reflected field on x-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_x_R_), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ex")
+            elif self.graph_axis.currentText() == "Reflected field on y-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_y_R_), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ey")
+            elif self.graph_axis.currentText() == "Reflected field on z-axis":
+                self.canvas.axes.plot_surface(X, Y, abs(E_z_R_), cmap=colormap)
+                self.canvas.axes.set_zlabel("Ez")
+        self.canvas.axes.set_xlabel("X")
+        self.canvas.axes.set_ylabel("Y")
+        self.canvas.draw()
+
+    def create_graphs_1(self, X, Y, U0_x_y, U_x_y_T_p, U_x_y_T_s, U_x_y_R_p, U_x_y_R_s, z):
+        self.canvas.axes.cla()
+        colormap = 'inferno'
+        if z == 0 or self.graph_axis.currentText() == "Initial field":
+            self.canvas.axes.plot_surface(X, Y, abs(U0_x_y), cmap=colormap)
+        else:
+            if self.graph_axis.currentText() == "Transmitted field (p - polarization)":
+                self.canvas.axes.plot_surface(X, Y, abs(U_x_y_T_p), cmap=colormap)
+            elif self.graph_axis.currentText() == "Transmitted field (s - polarization)":
+                self.canvas.axes.plot_surface(X, Y, abs(U_x_y_T_s), cmap=colormap)
+            elif self.graph_axis.currentText() == "Reflected field (p - polarization)":
+                self.canvas.axes.plot_surface(X, Y, abs(U_x_y_R_p), cmap=colormap)
+            elif self.graph_axis.currentText() == "Reflected field (s - polarization)":
+                self.canvas.axes.plot_surface(X, Y, abs(U_x_y_R_s), cmap=colormap)
+        self.canvas.axes.set_zlabel("U")
+        self.canvas.axes.set_xlabel("X")
+        self.canvas.axes.set_ylabel("Y")
+        self.canvas.draw()
 
 
-def gauss(left, right, step, z, w):
-    # CONSTANTS #
-    c = 3 * 1e10  # cm/s
-    f = 170 * 1e9  # Gh
-    k0 = (2 * math.pi * f) / c  # cm^-1
-    lambda_ = c / f  # cm
-    epsilon_1 = 1  # dielectric permittivity
-    epsilon_2 = 12
-    epsilon_3 = 1
-    tetta = (math.pi / 2) - 1.31  # angle between the horizontal axis and the plate
-    d_2 = 0.0675  # layer diameter in cm
-    # GAUSSIAN BEAM
-    x = np.arange(left, right, step)
-    y = np.arange(left, right, step)
-    N = (right - left) / step
-    X, Y = np.meshgrid(x, y)
-    v0 = 1j * (math.pi * (w ** 2)) / lambda_
-    E_x = (1 / v0) * np.exp(-1j * k0 * ((X ** 2 + Y ** 2) / 2) * (1 / v0))
-    E_y = 0 * X
-    E_z = (X / (v0 ** 2)) * np.exp(-1j * k0 * ((X ** 2 + Y ** 2) / 2) * (1 / v0))
+class MplCanvas_3D(FigureCanvas):
+    def __init__(self, parent=None, width=10, height=8, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111, projection='3d')
+        self.axes.set_facecolor('white')
+        self.axes.grid(color='black', linewidth=0.5)
+        self.axes.grid(True)
+        super(MplCanvas_3D, self).__init__(fig)
 
-    # DECOMPOSITION OF A GAUSSIAN BEAM INTO A FOURIER SPECTRUM #
-    gd = gaussian_decomposition.decomposition(E_x, x, y, k0)
-    k_x, k_y, k_z = gd[1], gd[2], gd[3]
-    unit_vector_E_s_x = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_s_y = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_s_z = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    for i in range(len(k_x)):
-        for j in range(len(k_x)):
-            if k_x[i][j] == k_y[i][j] == 0:
-                unit_vector_E_s_x[i][j] = 1
-                unit_vector_E_s_y[i][j] = 0
-                unit_vector_E_s_z[i][j] = 0
-            else:
-                unit_vector_E_s_x[i][j] = (k_y[i][j] / np.sqrt(abs(k_x[i][j]) ** 2 + abs(k_y[i][j]) ** 2))
-                unit_vector_E_s_y[i][j] = - (k_x[i][j] / np.sqrt(abs(k_x[i][j]) ** 2 + abs(k_y[i][j]) ** 2))
-                unit_vector_E_s_z[i][j] = 0
-    unit_vector_E_p_x = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_p_y = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_p_z = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    for i in range(len(k_x)):
-        for j in range(len(k_x)):
-            if k_x[i][j] == k_y[i][j] == 0:
-                unit_vector_E_p_x[i][j] = 0
-                unit_vector_E_p_y[i][j] = 1
-                unit_vector_E_p_z[i][j] = 0
-            else:
-                unit_vector_E_p_x[i][j] = (unit_vector_E_s_y[i][j] * k_z[i][j]) / \
-                                          np.sqrt(abs((unit_vector_E_s_y[i][j] * k_z[i][j])) ** 2 +
-                                                  abs((unit_vector_E_s_x[i][j] * k_z[i][j])) ** 2 +
-                                                  abs((unit_vector_E_s_x[i][j] * k_y[i][j] - unit_vector_E_s_y[i][j] *
-                                                       k_x[i][j])) ** 2)
-                unit_vector_E_p_y[i][j] = - (unit_vector_E_s_x[i][j] * k_z[i][j]) / \
-                                          np.sqrt(abs((unit_vector_E_s_y[i][j] * k_z[i][j])) ** 2 +
-                                                  abs((unit_vector_E_s_x[i][j] * k_z[i][j])) ** 2 +
-                                                  abs((unit_vector_E_s_x[i][j] * k_y[i][j] - unit_vector_E_s_y[i][j] *
-                                                       k_x[i][j])) ** 2)
-                unit_vector_E_p_z[i][j] = (unit_vector_E_s_x[i][j] * k_y[i][j] - unit_vector_E_s_y[i][j] * k_x[i][j]) / \
-                                          np.sqrt( abs((unit_vector_E_s_y[i][j] * k_z[i][j])) ** 2 +
-                                                  abs((unit_vector_E_s_x[i][j] * k_z[i][j])) ** 2 +
-                                                  abs((unit_vector_E_s_x[i][j] * k_y[i][j] - unit_vector_E_s_y[i][j] *
-                                                       k_x[i][j])) ** 2)
-    D = abs(abs(unit_vector_E_s_x) ** 2 + abs(unit_vector_E_s_y) ** 2 + abs(unit_vector_E_s_z) ** 2)
-    E = abs(abs(unit_vector_E_p_x) ** 2 + abs(unit_vector_E_p_y) ** 2 + abs(unit_vector_E_p_z) ** 2)
-    H = abs(
-        unit_vector_E_s_x * unit_vector_E_p_x + unit_vector_E_s_y * unit_vector_E_p_y + unit_vector_E_s_z * unit_vector_E_p_z)
-    C_s = fft2(
-        E_x * unit_vector_E_s_x.conjugate() + E_y * unit_vector_E_s_y.conjugate() + E_z * unit_vector_E_s_z.conjugate()) / (
-                      4 * math.pi ** 2)
-    C_p = fft2(
-        E_x * unit_vector_E_p_x.conjugate() + E_y * unit_vector_E_p_y.conjugate() + E_z * unit_vector_E_p_z.conjugate()) / (
-                      4 * math.pi ** 2)
-    # SEARCH FOR TRANSMISSION AND REFRACTION COEFFICIENT #
-    T_p = np.empty((len(k_z), len(k_z)), dtype='complex64')
-    R_p = np.empty((len(k_z), len(k_z)), dtype='complex64')
-    T_s = np.empty((len(k_z), len(k_z)), dtype='complex64')
-    R_s = np.empty((len(k_z), len(k_z)), dtype='complex64')
-    n = np.array([-math.cos(tetta), 0, -math.sin(tetta)])
-    for i in range(len(k_x)):
-        for j in range(len(k_y)):
-            if tetta != 0:
-                cos_alpha = (n[0] * k_x[i][j] + n[1] * k_y[i][j] + n[2] * k_z[i][j]) / (
-                        np.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2) * np.sqrt(
-                    k_x[i][j] ** 2 + k_y[i][j] ** 2 + k_z[i][j] ** 2))
-                alpha = np.sqrt(1 - cos_alpha ** 2)
-            else:
-                alpha = k_x[i][j] / k0
-            T_p[i][j] = matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha)[0]
-            R_p[i][j] = matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha)[1]
-            T_s[i][j] = matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha)[2]
-            R_s[i][j] = matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha)[3]
-    E_x_T = ifft2((T_p * C_p * unit_vector_E_p_x + T_s * C_s * unit_vector_E_s_x) * np.exp(1j * k_z * z))
-    E_x_R = ifft2((R_p * C_p * unit_vector_E_p_x + R_s * C_s * unit_vector_E_s_x) * np.exp(1j * k_z * z))
-    E_x_ = ifft2(C_p * unit_vector_E_p_x + C_s * unit_vector_E_s_x)
-    E_y_ = ifft2(C_p * unit_vector_E_p_y + C_s * unit_vector_E_s_y)
-    E_z_ = ifft2(C_p * unit_vector_E_p_z + C_s * unit_vector_E_s_z)
-    E_z_T = ifft2(C_p * unit_vector_E_p_z + C_s * unit_vector_E_s_z)
-    # FOLDING THE FOURIER SPECTRUM #
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111, projection='3d')
-    # ax.set_xlabel("X")
-    # ax.set_ylabel("Y")
-    # ax.set_zlabel("|Ex|")
-    # ax.plot_surface(X, Y, abs(E_x_), color='orange')
-    # ax.plot_surface(X, Y, abs(E_x_), color='blue')
-    # ax.plot_surface(X, Y, abs(E_y_), color='green')
-    # ax.plot_surface(X, Y, abs(E_x_), color='yellow')
-    # ax.plot_surface(X, Y, abs(E_x_), color='blue')
-    # ax.plot_surface(X, Y, abs(E_z), color='green')
-    # ax.plot_surface(X, Y, abs(E_x), color='green')
-    # plt.show()
-    return X, Y, E_x, E_y, E_z, E_x_, E_y_, E_z_, k_x, k_y
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    win = MainWindow()
+    win.show()
+    sys.exit(app.exec())
