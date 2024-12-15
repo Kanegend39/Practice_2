@@ -27,9 +27,9 @@ def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1=1, 
     k_y = 2 * np.pi * FY
     k_z = np.where(k0 ** 2 >= k_x ** 2 + k_y ** 2, np.sqrt(k0 ** 2 - k_x ** 2 - k_y ** 2, dtype='complex64'),
                    1j * np.sqrt(k_x ** 2 + k_y ** 2 - k0 ** 2, dtype='complex64'))
-    unit_vector_E_s_x = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_s_y = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_s_z = np.empty((len(k_x), len(k_x)), dtype="complex64")
+    unit_vector_E_s_x = np.empty(k_x.shape, dtype="complex64")
+    unit_vector_E_s_y = np.empty(k_x.shape, dtype="complex64")
+    unit_vector_E_s_z = np.empty(k_x.shape, dtype="complex64")
     for i in range(len(k_x)):
         for j in range(len(k_x)):
             if k_x[i][j] ** 2 + k_y[i][j] ** 2 == 0:
@@ -40,9 +40,9 @@ def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1=1, 
                 unit_vector_E_s_x[i][j] = (k_y[i][j] / np.sqrt(abs(k_x[i][j]) ** 2 + abs(k_y[i][j]) ** 2))
                 unit_vector_E_s_y[i][j] = - (k_x[i][j] / np.sqrt(abs(k_x[i][j]) ** 2 + abs(k_y[i][j]) ** 2))
                 unit_vector_E_s_z[i][j] = 0
-    unit_vector_E_p_x = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_p_y = np.empty((len(k_x), len(k_x)), dtype="complex64")
-    unit_vector_E_p_z = np.empty((len(k_x), len(k_x)), dtype="complex64")
+    unit_vector_E_p_x = np.empty(k_x.shape, dtype="complex64")
+    unit_vector_E_p_y = np.empty(k_x.shape, dtype="complex64")
+    unit_vector_E_p_z = np.empty(k_x.shape, dtype="complex64")
     for i in range(len(k_x)):
         for j in range(len(k_x)):
             if k0 ** 2 >= k_x[i][j] ** 2 + k_y[i][j] ** 2:
