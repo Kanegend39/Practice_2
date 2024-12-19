@@ -69,9 +69,9 @@ def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1=1, 
             T_p[i][j], R_p[i][j], T_s[i][j], R_s[i][j] = result
 
     # GAUSSIAN BEAM AFTER THE INVERSE FOURIER TRANSFORM CONSIDERING ITS PASSAGE THROUGH THE PLATE #
-    E_x = ifft2(C_p * unit_vector_E_p_x + C_s * unit_vector_E_s_x)
-    E_y = ifft2(C_p * unit_vector_E_p_y + C_s * unit_vector_E_s_y)
-    E_z = ifft2(C_p * unit_vector_E_p_z + C_s * unit_vector_E_s_z)
+    E_x = ifft2(C_p * unit_vector_E_p_x * np.exp(1j * k_z * z) + C_s * unit_vector_E_s_x * np.exp(1j * k_z * z))
+    E_y = ifft2(C_p * unit_vector_E_p_y * np.exp(1j * k_z * z) + C_s * unit_vector_E_s_y * np.exp(1j * k_z * z))
+    E_z = ifft2(C_p * unit_vector_E_p_z * np.exp(1j * k_z * z) + C_s * unit_vector_E_s_z * np.exp(1j * k_z * z))
     C_s_T = T_s * C_s * np.exp(1j * k_z * z)
     C_p_T = T_p * C_p * np.exp(1j * k_z * z)
     E_x_T_ = ifft2(C_p_T * unit_vector_E_p_x + C_s_T * unit_vector_E_s_x)
