@@ -31,7 +31,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vector.currentTextChanged.connect(self.change)
         self.distance.valueChanged.connect(self.upd)
 
-
     def upd(self):
         if self.distance.value() == 0 and self.vector.currentText() == "Consider the vector nature of the field":
             self.graph_axis.addItems(["Reflected field on x-axis", "Reflected field on y-axis",
@@ -74,11 +73,13 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.distance.value() == 0:
                 self.graph_axis.addItems(["Reflected field on x-axis", "Reflected field on y-axis",
                                           "Reflected field on z-axis"])
-            elif self.distance.value() >= self.plate_thickness.value():
+            elif self.distance.value() >= self.plate_thickness.value() and self.flag_2 is False:
                 self.graph_axis.addItems(["Transmitted field on x-axis", "Transmitted field on y-axis",
                                           "Transmitted field on z-axis"])
+                self.flag_2 = True
             self.flag_1 = True
         else:
+            self.flag_2 = False
             self.plate_thickness.setRange(0.00000, 1)
             self.plate_thickness.setEnabled(False)
             self.plate_thickness.setValue(0.00000)
