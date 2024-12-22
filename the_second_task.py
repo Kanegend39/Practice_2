@@ -6,7 +6,7 @@ from scipy.fft import fft2, fftfreq, ifft2
 from matrix_method import matrix_method
 
 
-def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1=1, epsilon_2=12, epsilon_3=1):
+def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1, epsilon_2, epsilon_3):
     # CONSTANTS #
     c = 3e10  # cm/s
     f = 170e9  # Gh

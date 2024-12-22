@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1557</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,11 +19,11 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>801</width>
+      <width>501</width>
       <height>391</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="form_for_graph" stretch="0">
+    <layout class="QVBoxLayout" name="form_for_graph_1" stretch="0">
      <property name="spacing">
       <number>6</number>
      </property>
@@ -31,7 +31,7 @@
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="form_for_tools">
+      <layout class="QVBoxLayout" name="form_for_tools_1">
        <property name="sizeConstraint">
         <enum>QLayout::SetDefaultConstraint</enum>
        </property>
@@ -44,7 +44,7 @@
      <rect>
       <x>10</x>
       <y>400</y>
-      <width>321</width>
+      <width>471</width>
       <height>21</height>
      </rect>
     </property>
@@ -62,9 +62,9 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>500</x>
       <y>400</y>
-      <width>411</width>
+      <width>1031</width>
       <height>151</height>
      </rect>
     </property>
@@ -95,7 +95,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>121</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -124,7 +124,7 @@
       <rect>
        <x>20</x>
        <y>70</y>
-       <width>121</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -162,7 +162,7 @@
       <rect>
        <x>20</x>
        <y>110</y>
-       <width>121</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -175,7 +175,7 @@
       <rect>
        <x>210</x>
        <y>30</y>
-       <width>131</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -226,7 +226,7 @@
       <rect>
        <x>210</x>
        <y>70</y>
-       <width>131</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -239,7 +239,7 @@
       <rect>
        <x>210</x>
        <y>110</y>
-       <width>131</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -272,29 +272,115 @@
       <double>0.006750000000000</double>
      </property>
     </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>30</y>
+       <width>261</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Dielectric permittivity of the medium on the left</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>70</y>
+       <width>261</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Dielectric permittivity of the plate</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>110</y>
+       <width>261</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Dielectric permittivity of the medium on the right</string>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="epsilon_1">
+     <property name="geometry">
+      <rect>
+       <x>680</x>
+       <y>30</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="epsilon_2">
+     <property name="geometry">
+      <rect>
+       <x>680</x>
+       <y>70</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>12.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="epsilon_3">
+     <property name="geometry">
+      <rect>
+       <x>680</x>
+       <y>110</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
    </widget>
    <widget class="QComboBox" name="graph_axis">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>430</y>
-      <width>321</width>
+      <width>471</width>
       <height>22</height>
      </rect>
     </property>
     <item>
      <property name="text">
-      <string>x-axis field</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>y-axis field</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>z-axis field</string>
+      <string>Propagation in free space</string>
      </property>
     </item>
    </widget>
@@ -308,8 +394,38 @@
      </rect>
     </property>
     <property name="text">
-     <string>Build a graph</string>
+     <string>Plot graph</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>0</y>
+      <width>501</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="form_for_graph_2">
+     <item>
+      <layout class="QVBoxLayout" name="form_for_tools_2"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>0</y>
+      <width>511</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="form_for_graph_3">
+     <item>
+      <layout class="QVBoxLayout" name="form_for_tools_3"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -317,7 +433,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1557</width>
      <height>21</height>
     </rect>
    </property>
