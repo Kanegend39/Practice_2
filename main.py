@@ -3,6 +3,7 @@ import sys
 from PyQt6 import QtWidgets
 from PyQt6 import uic
 
+import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -77,7 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def change(self):
         if self.flag_1 is False:
-            self.configure_parameters(True, d_min=0.00001, d_max=1, d_standart=0.00675, epsilon_min=0.0001,
+            self.configure_parameters(True, d_min=0.00001, d_max=1000, d_standart=0.00675, epsilon_min=0.0001,
                                       epsilon_max=100, epsilon_1=1, epsilon_2=12, epsilon_3=1)
             self.graph_axis.clear()
             new_items = ["Propagation in free space"]

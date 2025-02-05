@@ -1,42 +1,43 @@
 import numpy as np
 
 
-def matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha):
-    n_1 = np.sqrt(epsilon_1)
-    n_2 = np.sqrt(epsilon_2)
-    n_3 = np.sqrt(epsilon_3)
+def matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha, n=7):
+    d_i = [0.68, d_2, 0.68]
+    n_i = np.arange(0, n, 1., dtype='complex64')
+    epsilons = [1, 12, 1, 1, 1, 12, 1]
+    N_i = np.arange(0, n, 1., dtype='complex64')
+    phi_i = np.arange(0, n // 2, 1., dtype='complex64')
+    M_i_s = []
+    M_i_p = []
+    PHI_i = []
     c = 3 * 1e10
     k_0 = (2 * np.pi * f) / c
     k_x = k_0 * alpha
-    N_1 = np.sqrt(epsilon_1 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
-    N_2 = np.sqrt(epsilon_2 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
-    N_3 = np.sqrt(epsilon_3 - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
-    phi_2 = np.exp(1j * N_2 * k_0 * d_2)
-    M_21_s = np.array([(N_2 + N_1) / (2 * N_2), (N_1 - N_2) / (2 * N_2),  # transfer matrix, s - polarization
-                       (N_1 - N_2) / (2 * N_2), (N_2 + N_1) / (2 * N_2)])
-    M_21_p = np.array([((epsilon_1 * N_2 + epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2,
-                       # transfer matrix, p - polarization
-                       ((epsilon_1 * N_2 - epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2,
-                       ((epsilon_1 * N_2 - epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2,
-                       ((epsilon_1 * N_2 + epsilon_2 * N_1) / (2 * N_2 * epsilon_1 * epsilon_2)) * n_1 * n_2])
-    M_32_s = np.array([(N_3 + N_2) / (2 * N_3), (N_2 - N_3) / (2 * N_3),  # transfer matrix, s - polarization
-                       (N_2 - N_3) / (2 * N_3), (N_3 + N_2) / (2 * N_3)])
-    M_32_p = np.array([((epsilon_2 * N_3 + epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3,
-                       # transfer matrix, p - polarization
-                       ((epsilon_2 * N_3 - epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3,
-                       ((epsilon_2 * N_3 - epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3,
-                       ((epsilon_2 * N_3 + epsilon_3 * N_2) / (2 * N_3 * epsilon_2 * epsilon_3)) * n_2 * n_3])
-    PHI_2 = [phi_2, 0, 0, phi_2 ** (-1)]  # propagation matrix
-    A_s = [M_32_s[0] * PHI_2[0] + M_32_s[1] * PHI_2[2], M_32_s[0] * PHI_2[2] + M_32_s[1] * PHI_2[3],
-           M_32_s[2] * PHI_2[0] + M_32_s[3] * PHI_2[2], M_32_s[2] * PHI_2[2] + M_32_s[3] * PHI_2[3]]  # M32 * PHI2
-    Tw_s = [A_s[0] * M_21_s[0] + A_s[1] * M_21_s[2], A_s[0] * M_21_s[2] + A_s[1] * M_21_s[3],
-            A_s[2] * M_21_s[0] + A_s[3] * M_21_s[2], A_s[2] * M_21_s[2] + A_s[3] * M_21_s[3]]
-    A_p = [M_32_p[0] * PHI_2[0] + M_32_p[1] * PHI_2[2], M_32_p[0] * PHI_2[2] + M_32_p[1] * PHI_2[3],
-           M_32_p[2] * PHI_2[0] + M_32_p[3] * PHI_2[2], M_32_p[2] * PHI_2[2] + M_32_p[3] * PHI_2[3]]  # M32 * PHI2
-    Tw_p = [A_p[0] * M_21_p[0] + A_p[1] * M_21_p[2], A_p[0] * M_21_p[2] + A_p[1] * M_21_p[3],
-            A_p[2] * M_21_p[0] + A_p[3] * M_21_p[2], A_p[2] * M_21_p[2] + A_p[3] * M_21_p[3]]
-    R_s = - (Tw_s[2] / Tw_s[3])
-    R_p = - (Tw_p[2] / Tw_p[3])
-    T_p = Tw_p[0] + R_p * Tw_p[1]
-    T_s = Tw_s[0] + R_s * Tw_s[1]
+    for i in range(n):
+        n_i[i] = np.sqrt(epsilons[i], dtype='complex64')
+        N_i[i] = np.sqrt(epsilons[i] - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
+    for i in range(n // 2):
+        phi_i[i] = np.exp(1j * N_i[i * (i % 2) + (i // (i | 1)) + 1] * k_0 * d_i[i], dtype='complex64')
+        PHI_i.append(np.array([[phi_i[i], 0], [0, phi_i[i] ** (-1)]], dtype='complex64'))
+    for i in range(n - 1):
+        M_i_s.append(np.array([[(N_i[i + 1] + N_i[i]) / (2 * N_i[i + 1]), (N_i[i] - N_i[i + 1]) / (2 * N_i[i + 1])],
+                            [(N_i[i] - N_i[i + 1]) / (2 * N_i[i + 1]), (N_i[i + 1] + N_i[i]) / (2 * N_i[i + 1])]], dtype='complex64'))
+        M_i_p.append(np.array([[((epsilons[i] * N_i[i + 1] + epsilons[i + 1] * N_i[i]) / (2 * N_i[i + 1] * epsilons[i] * epsilons[i + 1])) * n_i[i] * n_i[i + 1],
+                       ((epsilons[i] * N_i[i + 1] - epsilons[i + 1] * N_i[i]) / (2 * N_i[i + 1] * epsilons[i] * epsilons[i + 1])) * n_i[i] * n_i[i + 1]],
+                       [((epsilons[i] * N_i[i + 1] - epsilons[i + 1] * N_i[i]) / (2 * N_i[i + 1] * epsilons[i] * epsilons[i + 1])) * n_i[i] * n_i[i + 1],
+                       ((epsilons[i] * N_i[i + 1] + epsilons[i + 1] * N_i[i]) / (2 * N_i[i + 1] * epsilons[i] * epsilons[i + 1])) * n_i[i] * n_i[i + 1]]], dtype='complex64'))
+    W_s = M_i_s[n - 2]
+    for i in range(n - 3, -1, -1):
+        if i % 2 == 0:
+            W_s = W_s @ PHI_i[i // 2]
+        W_s = W_s @ M_i_s[i]
+    W_p = M_i_p[n - 2]
+    for i in range(n - 3, -1, -1):
+        if i % 2 == 0:
+            W_p = W_p @ PHI_i[i // 2]
+        W_p = W_p @ M_i_p[i]
+    R_s = - (W_s[1][0] / W_s[1][1])
+    R_p = - (W_p[1][0] / W_p[1][1])
+    T_p = W_p[0][0] + R_p * W_p[0][1]
+    T_s = W_s[0][0] + R_s * W_s[0][1]
     return T_p, R_p, T_s, R_s
