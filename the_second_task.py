@@ -6,8 +6,9 @@ from scipy.fft import fft2, fftfreq, ifft2
 from matrix_method import matrix_method
 
 
-def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1, epsilon_2, epsilon_3):
+def gaussian_beam_propagation_vector(left, right, step, z, w, d_i, epsilons, n):
     # CONSTANTS #
+    right += step
     c = 3e10  # cm/s
     f = 170e9  # Gh
     k0 = (2 * np.pi * f) / c  # cm^-1
@@ -65,7 +66,7 @@ def gaussian_beam_propagation_vector(left, right, step, z, w, d_2, epsilon_1, ep
     for i in range(len(k_x)):
         for j in range(len(k_y)):
             alpha = k_x[i][j] / k0
-            result = matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha)
+            result = matrix_method(f, epsilons, d_i, alpha, n)
             T_p[i][j], R_p[i][j], T_s[i][j], R_s[i][j] = result
 
     # GAUSSIAN BEAM AFTER THE INVERSE FOURIER TRANSFORM CONSIDERING ITS PASSAGE THROUGH THE PLATE #

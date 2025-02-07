@@ -1,10 +1,9 @@
 import numpy as np
 
 
-def matrix_method(f, epsilon_1, epsilon_2, epsilon_3, d_2, alpha, n=7):
-    d_i = [0.68, d_2, 0.68]
+def matrix_method(f, epsilons, d_i, alpha, n):
+    n = n * 2 + 1
     n_i = np.arange(0, n, 1., dtype='complex64')
-    epsilons = [1, 12, 1, 1, 1, 12, 1]
     N_i = np.arange(0, n, 1., dtype='complex64')
     phi_i = np.arange(0, n // 2, 1., dtype='complex64')
     M_i_s = []
