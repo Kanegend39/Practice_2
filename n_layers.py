@@ -1,6 +1,9 @@
 from PyQt6 import QtWidgets
 from PyQt6 import uic
 import sys
+import time
+import psutil
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -27,6 +30,7 @@ class N_Layers(QtWidgets.QWidget):
         self.y_section.toggled.connect(self.on_y_section)
         self.export_section.clicked.connect(self.export_2d)
         self.button_export_3d.clicked.connect(self.export_3d)
+        self.button_add_data.clicked.connect(self.add_data)
         self.number_of_file = 1
 
     def setup_ui(self):
@@ -88,6 +92,9 @@ class N_Layers(QtWidgets.QWidget):
 
     def graph(self):
         try:
+            start_time = time.time()
+            process = psutil.Process(os.getpid())
+            memory_usage_before = process.memory_info().rss
             X, Y, E_x, E_y, E_z, E_x_T_, E_y_T_, E_z_T_, E_x_R_, E_y_R_, E_z_R = self.read_data()
             colormap = 'inferno'
             z_axis = ["|Ex|", "|Ey|", "|Ez|"]
@@ -101,6 +108,11 @@ class N_Layers(QtWidgets.QWidget):
                 canvas.axes.set_ylabel("Y")
                 canvas.draw()
             self.button_export_3d.setEnabled(True)
+            memory_usage_after = process.memory_info().rss
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f"Время выполнения метода run: {execution_time} секунд")
+            print(f"Использование памяти: {(memory_usage_after - memory_usage_before) / (1024 * 1024)} МБ")
         except Exception:
             self.error_table_window = Error_table()
             self.error_table_window.show()
@@ -126,6 +138,9 @@ class N_Layers(QtWidgets.QWidget):
                     return X[i], E_x_T_[i], E_y_T_[i], E_z_T_[i]
 
     def section(self):
+        start_time = time.time()
+        process = psutil.Process(os.getpid())
+        memory_usage_before = process.memory_info().rss
         plt.close('all')
         if self.x_section.isChecked():
             try:
@@ -173,6 +188,11 @@ class N_Layers(QtWidgets.QWidget):
             except Exception:
                 self.error_table_window = Error_table()
                 self.error_table_window.show()
+        memory_usage_after = process.memory_info().rss
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Время выполнения метода run: {execution_time} секунд")
+        print(f"Использование памяти: {(memory_usage_after - memory_usage_before) / (1024 * 1024)} МБ")
 
     def on_x_section(self):
         self.y_const_section.setEnabled(False)
@@ -184,6 +204,9 @@ class N_Layers(QtWidgets.QWidget):
 
     def export_2d(self):
         try:
+            start_time = time.time()
+            process = psutil.Process(os.getpid())
+            memory_usage_before = process.memory_info().rss
             A, B, C, D = self.find_section()
             if self.x_section.isChecked():
                 name_1 = f"x={self.x_const_section.value()}_section_{self.number_of_file}.txt"
@@ -191,15 +214,14 @@ class N_Layers(QtWidgets.QWidget):
                 my_file_1 = open(name_1, "w+")
                 my_file_2 = open(name_2, "w+")
                 my_file_2.write(f"left_border={self.left_border.value()}, right_border={self.right_border.value()}, "
-                              f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
-                              f"number_of_layers={self.number_of_layers.value()}\n")
+                                f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
+                                f"number_of_layers={self.number_of_layers.value()}\n")
                 for i in range(self.table.rowCount()):
-                    my_file_2.write(
-                        f"thickness={self.table.item(i, 0).text().replace(",", ".")}, epsilon={float(self.table.item(i, 1).text().replace(",", ".")) + 1j * float(
-                            self.table.item(i, 2).text().replace(",", "."))}\n")
+                    my_file_2.write(f"thickness={self.table.item(i, 0).text().replace(',', '.')}, epsilon={float(self.table.item(i, 1).text().replace(',', '.')) + 1j * float(self.table.item(i, 2).text().replace(',', '.'))}\n")
                 my_file_2.write("y  Re(Ex)  Im(Ex)  Re(Ey)  Im(Ey)  Re(Ez)  Im(Ez)\n")
                 for i in range(len(A)):
-                    my_file_1.write(f"{A[i]}  {B[i].real}  {B[i].imag}  {C[i].real}  {C[i].imag}  {D[i].real}  {D[i].imag}\n")
+                    my_file_1.write(
+                        f"{A[i]}  {B[i].real}  {B[i].imag}  {C[i].real}  {C[i].imag}  {D[i].real}  {D[i].imag}\n")
                 my_file_1.close()
                 my_file_2.close()
             elif self.y_section.isChecked():
@@ -208,24 +230,32 @@ class N_Layers(QtWidgets.QWidget):
                 my_file_1 = open(name_1, "w+")
                 my_file_2 = open(name_2, "w+")
                 my_file_2.write(f"left_border={self.left_border.value()}, right_border={self.right_border.value()}, "
-                              f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
-                              f"number_of_layers={self.number_of_layers.value()}\n")
+                                f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
+                                f"number_of_layers={self.number_of_layers.value()}\n")
                 for i in range(self.table.rowCount()):
                     my_file_2.write(
-                        f"thickness={self.table.item(i, 0).text().replace(",", ".")}, epsilon={float(self.table.item(i, 1).text().replace(",", ".")) + 1j * float(
-                            self.table.item(i, 2).text().replace(",", "."))}\n")
+                        f"thickness={self.table.item(i, 0).text().replace(',', '.')}, epsilon={float(self.table.item(i, 1).text().replace(',', '.')) + 1j * float(self.table.item(i, 2).text().replace(',', '.'))}\n")
                 my_file_2.write("x  Re(Ex)  Im(Ex)  Re(Ey)  Im(Ey)  Re(Ez)  Im(Ez)\n")
                 for i in range(len(A)):
-                    my_file_1.write(f"{A[i]}  {B[i].real}  {B[i].imag}  {C[i].real}  {C[i].imag}  {D[i].real}  {D[i].imag}\n")
+                    my_file_1.write(
+                        f"{A[i]}  {B[i].real}  {B[i].imag}  {C[i].real}  {C[i].imag}  {D[i].real}  {D[i].imag}\n")
                 my_file_1.close()
                 my_file_2.close()
             self.number_of_file += 1
+            memory_usage_after = process.memory_info().rss
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f"Время выполнения метода run: {execution_time} секунд")
+            print(f"Использование памяти: {(memory_usage_after - memory_usage_before) / (1024 * 1024)} МБ")
         except Exception:
             self.error_table_window = Error_table()
             self.error_table_window.show()
 
     def export_3d(self):
         try:
+            start_time = time.time()
+            process = psutil.Process(os.getpid())
+            memory_usage_before = process.memory_info().rss
             X, Y, E_x, E_y, E_z, E_x_T_, E_y_T_, E_z_T_, E_x_R_, E_y_R_, E_z_R = self.read_data()
             name_1 = f"graph_3d_{self.number_of_file}.txt"
             name_2 = f"README_graph_3d_{self.number_of_file}.txt"
@@ -236,8 +266,7 @@ class N_Layers(QtWidgets.QWidget):
                             f"number_of_layers={self.number_of_layers.value()}\n")
             for i in range(self.table.rowCount()):
                 my_file_2.write(
-                    f"thickness={self.table.item(i, 0).text().replace(",", ".")}, epsilon={float(self.table.item(i, 1).text().replace(",", ".")) + 1j * float(
-                        self.table.item(i, 2).text().replace(",", "."))}\n")
+                    f"thickness={self.table.item(i, 0).text().replace(',', '.')}, epsilon={float(self.table.item(i, 1).text().replace(',', '.')) + 1j * float(self.table.item(i, 2).text().replace(',', '.'))}\n")
             my_file_2.write("x  y  Re(Ex)  Im(Ex)  Re(Ey)  Im(Ey)  Re(Ez)  Im(Ez)\n")
             for i in range(len(X)):
                 for j in range(len(X)):
@@ -247,9 +276,31 @@ class N_Layers(QtWidgets.QWidget):
             my_file_1.close()
             my_file_2.close()
             self.number_of_file += 1
+            memory_usage_after = process.memory_info().rss
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f"Время выполнения метода run: {execution_time} секунд")
+            print(f"Использование памяти: {(memory_usage_after - memory_usage_before) / (1024 * 1024)} МБ")
         except Exception:
             self.error_table_window = Error_table()
             self.error_table_window.show()
+
+    def add_data(self):
+        H = self.plate_thickness_h.value()
+        L = self.layer_thickness_l.value()
+        n = self.number_of_layers_n.value()
+        epsilon_0_shtrih = self.epsilon_0_shtrih.value()
+        epsilon_0_shtrih_shtrih = self.epsilon_0_shtrih_shtrih.value()
+        epsilon_1 = self.epsilon_1.value()
+        epsilon_2 = self.epsilon_2.value()
+        self.number_of_layers.setValue(n + 1)
+        for i in range(self.table.rowCount()):
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(L / n)))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih + epsilon_1 * np.exp(- (i * (L / n)) / (L / n)))))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih_shtrih + epsilon_2 * np.exp(- (i * (L / n)) / (L / n)))))
+        self.table.setItem(n, 0, QtWidgets.QTableWidgetItem(str(H - L)))
+        self.table.setItem(n, 1, QtWidgets.QTableWidgetItem(str(12.)))
+        self.table.setItem(n, 2, QtWidgets.QTableWidgetItem(str(0.)))
 
     def exit(self):
         self.close()

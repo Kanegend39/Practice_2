@@ -3,7 +3,6 @@ import sys
 from PyQt6 import QtWidgets
 from PyQt6 import uic
 
-
 from layer import Layer
 from n_layers import N_Layers
 
