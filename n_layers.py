@@ -6,6 +6,7 @@ import psutil
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from the_second_task import gaussian_beam_propagation_vector
@@ -81,13 +82,13 @@ class N_Layers(QtWidgets.QWidget):
         w = self.wave_waist.value()
         n = self.number_of_layers.value()
         d_i = np.empty(self.table.rowCount(), dtype="float64")
-        epsilons = np.empty(self.table.rowCount() * 2 + 1, dtype="complex64")
+        epsilons = np.empty(self.table.rowCount() + 2, dtype="complex64")
         epsilons[0] = 1 + 0j
         for i in range(self.table.rowCount()):
             d_i[i] = float(self.table.item(i, 0).text().replace(",", "."))
-            epsilons[i * 2 + 1] = float(self.table.item(i, 1).text().replace(",", ".")) + 1j * float(
+            epsilons[i + 1] = float(self.table.item(i, 1).text().replace(",", ".")) + 1j * float(
                 self.table.item(i, 2).text().replace(",", "."))
-            epsilons[(i + 1) * 2] = 1 + 0j
+        epsilons[self.table.rowCount() + 1] = 1 + 0j
         return gaussian_beam_propagation_vector(left, right, step, z, w, d_i, epsilons, n)
 
     def graph(self):
@@ -126,7 +127,7 @@ class N_Layers(QtWidgets.QWidget):
             E_T_3 = np.empty(len(X), dtype='complex64')
             for i in range(len(X)):
                 for j in range(len(X)):
-                    if abs(X[i][j] - self.x_const_section.value()) < 1e-9:
+                    if math.isclose(X[i][j], self.x_const_section.value(), abs_tol=1e-9):
                         y[i] = Y[i][j]
                         E_T_1[i] = E_x_T_[i][j]
                         E_T_2[i] = E_y_T_[i][j]
@@ -134,7 +135,7 @@ class N_Layers(QtWidgets.QWidget):
             return y, E_T_1, E_T_2, E_T_3
         elif self.y_section.isChecked():
             for i in range(len(Y)):
-                if abs(Y[i][i] - self.y_const_section.value()) < 1e-9:
+                if math.isclose(Y[i][i], self.y_const_section.value(), abs_tol=1e-9):
                     return X[i], E_x_T_[i], E_y_T_[i], E_z_T_[i]
 
     def section(self):
