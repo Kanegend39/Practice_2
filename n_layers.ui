@@ -157,31 +157,6 @@
      <string>Right border</string>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="step">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>110</y>
-      <width>71</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="decimals">
-     <number>3</number>
-    </property>
-    <property name="minimum">
-     <double>0.001000000000000</double>
-    </property>
-    <property name="maximum">
-     <double>1.000000000000000</double>
-    </property>
-    <property name="singleStep">
-     <double>0.010000000000000</double>
-    </property>
-    <property name="value">
-     <double>0.100000000000000</double>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
@@ -291,6 +266,35 @@
      <number>10000000</number>
     </property>
    </widget>
+   <widget class="QRadioButton" name="radioButton_step_1">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>110</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0,1</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_step_2">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>110</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0,01</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QTableWidget" name="table">
    <property name="geometry">
@@ -356,6 +360,9 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="decimals">
+     <number>1</number>
+    </property>
    </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
@@ -378,6 +385,9 @@
       <width>61</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="decimals">
+     <number>1</number>
     </property>
    </widget>
    <widget class="QPushButton" name="plot_section">

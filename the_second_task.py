@@ -59,10 +59,10 @@ def gaussian_beam_propagation_vector(left, right, step, z, w, d_i, epsilons, n):
     C_p = fft2(E_x) * unit_vector_E_p_x + fft2(E_y) * unit_vector_E_p_y + fft2(E_z) * unit_vector_E_p_z
 
     # SEARCH FOR TRANSMISSION AND REFRACTION COEFFICIENT #
-    T_p = np.empty(k_x.shape, dtype='complex64')
-    R_p = np.empty(k_x.shape, dtype='complex64')
-    T_s = np.empty(k_x.shape, dtype='complex64')
-    R_s = np.empty(k_x.shape, dtype='complex64')
+    T_p = np.empty(k_x.shape, dtype='complex128')
+    R_p = np.empty(k_x.shape, dtype='complex128')
+    T_s = np.empty(k_x.shape, dtype='complex128')
+    R_s = np.empty(k_x.shape, dtype='complex128')
     for i in range(len(k_x)):
         for j in range(len(k_y)):
             alpha = k_x[i][j] / k0

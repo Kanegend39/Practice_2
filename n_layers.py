@@ -32,6 +32,8 @@ class N_Layers(QtWidgets.QWidget):
         self.export_section.clicked.connect(self.export_2d)
         self.button_export_3d.clicked.connect(self.export_3d)
         self.button_add_data.clicked.connect(self.add_data)
+        self.radioButton_step_1.toggled.connect(self.change_decimals)
+        self.radioButton_step_2.toggled.connect(self.change_decimals)
         self.number_of_file = 1
 
     def setup_ui(self):
@@ -74,10 +76,22 @@ class N_Layers(QtWidgets.QWidget):
         self.x_const_section.setRange(self.left_border.value(), self.right_border.value())
         self.y_const_section.setRange(self.left_border.value(), self.right_border.value())
 
+    def change_decimals(self):
+        if self.radioButton_step_1.isChecked():
+            self.x_const_section.setDecimals(1)
+            self.y_const_section.setDecimals(1)
+        elif self.radioButton_step_2.isChecked():
+            self.x_const_section.setDecimals(2)
+            self.y_const_section.setDecimals(2)
+
     def read_data(self):
         left = self.left_border.value()
         right = self.right_border.value()
-        step = self.step.value()
+        if self.radioButton_step_1.isChecked():
+            self.step = 0.1
+        elif self.radioButton_step_2.isChecked():
+            self.step = 0.01
+        step = self.step
         z = self.distance.value()
         w = self.wave_waist.value()
         n = self.number_of_layers.value()
@@ -215,7 +229,7 @@ class N_Layers(QtWidgets.QWidget):
                 my_file_1 = open(name_1, "w+")
                 my_file_2 = open(name_2, "w+")
                 my_file_2.write(f"left_border={self.left_border.value()}, right_border={self.right_border.value()}, "
-                                f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
+                                f"step={self.step}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
                                 f"number_of_layers={self.number_of_layers.value()}\n")
                 for i in range(self.table.rowCount()):
                     my_file_2.write(f"thickness={self.table.item(i, 0).text().replace(',', '.')}, epsilon={float(self.table.item(i, 1).text().replace(',', '.')) + 1j * float(self.table.item(i, 2).text().replace(',', '.'))}\n")
@@ -231,7 +245,7 @@ class N_Layers(QtWidgets.QWidget):
                 my_file_1 = open(name_1, "w+")
                 my_file_2 = open(name_2, "w+")
                 my_file_2.write(f"left_border={self.left_border.value()}, right_border={self.right_border.value()}, "
-                                f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
+                                f"step={self.step}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
                                 f"number_of_layers={self.number_of_layers.value()}\n")
                 for i in range(self.table.rowCount()):
                     my_file_2.write(
@@ -263,7 +277,7 @@ class N_Layers(QtWidgets.QWidget):
             my_file_1 = open(name_1, "w+")
             my_file_2 = open(name_2, "w+")
             my_file_2.write(f"left_border={self.left_border.value()}, right_border={self.right_border.value()}, "
-                            f"step={self.step.value()}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
+                            f"step={self.step}, distance={self.distance.value()}, wave_waist={self.wave_waist.value()}, "
                             f"number_of_layers={self.number_of_layers.value()}\n")
             for i in range(self.table.rowCount()):
                 my_file_2.write(

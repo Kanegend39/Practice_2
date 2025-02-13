@@ -16,7 +16,6 @@ def matrix_method(f, epsilons, d_i, alpha, n):
         n_i[i] = np.sqrt(epsilons[i], dtype='complex64')
         N_i[i] = np.sqrt(epsilons[i] - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
     for i in range(n // 2):
-        print(i * 2 + 1)
         phi_i[i] = np.exp(1j * N_i[i * 2 + 1] * k_0 * d_i[i], dtype='complex64')
         PHI_i.append(np.array([[phi_i[i], 0], [0, phi_i[i] ** (-1)]], dtype='complex64'))
     for i in range(n - 1):
@@ -43,4 +42,4 @@ def matrix_method(f, epsilons, d_i, alpha, n):
     return T_p, R_p, T_s, R_s
 
 
-matrix_method(170e9, [1, 12, 1, 1, 1, 1, 1], [0.068, 0.07, 0.068], 0.25, 3)
+matrix_method(170e9, [1, 12, 1], [0.068], 0.25, 1)
