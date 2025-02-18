@@ -10,6 +10,7 @@ import math
 
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from the_second_task import gaussian_beam_propagation_vector
+from the_third_task import gaussian_beam_propagation_vector_angle
 from Canvas_3D import MplCanvas_3D
 from error_table import Error_table
 
@@ -34,6 +35,7 @@ class N_Layers(QtWidgets.QWidget):
         self.button_add_data.clicked.connect(self.add_data)
         self.radioButton_step_1.toggled.connect(self.change_decimals)
         self.radioButton_step_2.toggled.connect(self.change_decimals)
+        self.plot_special_graph.clicked.connect(self.special_graph)
         self.number_of_file = 1
 
     def setup_ui(self):
@@ -306,16 +308,50 @@ class N_Layers(QtWidgets.QWidget):
         n = self.number_of_layers_n.value()
         epsilon_0_shtrih = self.epsilon_0_shtrih.value()
         epsilon_0_shtrih_shtrih = self.epsilon_0_shtrih_shtrih.value()
-        epsilon_1 = self.epsilon_1.value()
-        epsilon_2 = self.epsilon_2.value()
+        epsilon_1_shtrih = self.epsilon_1_shtrih.value()
+        epsilon_1_shtrih_shtrih = self.epsilon_1_shtrih_shtrih.value()
+        number_of_L = self.number_of_L.value()
         self.number_of_layers.setValue(n + 1)
         for i in range(self.table.rowCount()):
-            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(L / n)))
-            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih + epsilon_1 * np.exp(- (i * (L / n)) / (L / n)))))
-            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih_shtrih + epsilon_2 * np.exp(- (i * (L / n)) / (L / n)))))
-        self.table.setItem(n, 0, QtWidgets.QTableWidgetItem(str(H - L)))
-        self.table.setItem(n, 1, QtWidgets.QTableWidgetItem(str(12.)))
-        self.table.setItem(n, 2, QtWidgets.QTableWidgetItem(str(0.)))
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str((number_of_L * L) / n)))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih + (epsilon_1_shtrih - epsilon_0_shtrih) * np.exp(- (i * ((number_of_L * L) / n)) / L))))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih_shtrih + (epsilon_1_shtrih_shtrih - epsilon_0_shtrih_shtrih) * np.exp(- (i * ((number_of_L * L) / n)) / L))))
+        self.table.setItem(n, 0, QtWidgets.QTableWidgetItem(str(H - number_of_L * L)))
+        self.table.setItem(n, 1, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih)))
+        self.table.setItem(n, 2, QtWidgets.QTableWidgetItem(str(epsilon_0_shtrih_shtrih)))
+
+    def special_graph(self):
+        left = self.left_border.value()
+        right = self.right_border.value()
+        if self.radioButton_step_1.isChecked():
+            self.step = 0.1
+        elif self.radioButton_step_2.isChecked():
+            self.step = 0.01
+        step = self.step
+        w = self.wave_waist.value()
+        z = self.distance.value()
+        phi = self.angle.value()
+        n = self.number_of_layers.value()
+        d_i = np.empty(self.table.rowCount(), dtype="float64")
+        epsilons = np.empty(self.table.rowCount() + 2, dtype="complex64")
+        epsilons[0] = 1 + 0j
+        for i in range(self.table.rowCount()):
+            d_i[i] = float(self.table.item(i, 0).text().replace(",", "."))
+            epsilons[i + 1] = float(self.table.item(i, 1).text().replace(",", ".")) + 1j * float(
+                self.table.item(i, 2).text().replace(",", "."))
+        epsilons[self.table.rowCount() + 1] = 1 + 0j
+        X, Y, E_x, E_y, E_z, E_x_T, E_y_T, E_z_T = gaussian_beam_propagation_vector_angle(left, right, step, w, phi, z, d_i, epsilons, n)
+        colormap = 'inferno'
+        z_axis = ["|Ex|", "|Ey|", "|Ez|"]
+        graphs_transmitted = [abs(E_x_T), abs(E_y_T), abs(E_z_T)]
+        for i in range(len(self.canvases)):
+            canvas = self.canvases[i]
+            canvas.axes.cla()
+            canvas.axes.plot_surface(X, Y, graphs_transmitted[i], cmap=colormap)
+            canvas.axes.set_zlabel(z_axis[i])
+            canvas.axes.set_xlabel("X")
+            canvas.axes.set_ylabel("Y")
+            canvas.draw()
 
     def exit(self):
         self.close()

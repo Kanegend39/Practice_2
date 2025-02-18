@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1601</width>
-    <height>879</height>
+    <height>853</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,7 +89,7 @@
     <rect>
      <x>310</x>
      <y>400</y>
-     <width>411</width>
+     <width>521</width>
      <height>161</height>
     </rect>
    </property>
@@ -173,7 +173,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>310</x>
       <y>30</y>
       <width>101</width>
       <height>21</height>
@@ -186,7 +186,7 @@
    <widget class="QDoubleSpinBox" name="distance">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>440</x>
       <y>30</y>
       <width>71</width>
       <height>22</height>
@@ -205,7 +205,7 @@
    <widget class="QDoubleSpinBox" name="wave_waist">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>440</x>
       <y>70</y>
       <width>71</width>
       <height>22</height>
@@ -227,7 +227,7 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>310</x>
       <y>70</y>
       <width>101</width>
       <height>21</height>
@@ -240,7 +240,7 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>310</x>
       <y>100</y>
       <width>121</width>
       <height>41</height>
@@ -253,7 +253,7 @@
    <widget class="QSpinBox" name="number_of_layers">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>440</x>
       <y>110</y>
       <width>71</width>
       <height>22</height>
@@ -269,9 +269,9 @@
    <widget class="QRadioButton" name="radioButton_step_1">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>120</x>
       <y>110</y>
-      <width>51</width>
+      <width>61</width>
       <height>21</height>
      </rect>
     </property>
@@ -285,9 +285,9 @@
    <widget class="QRadioButton" name="radioButton_step_2">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>200</x>
       <y>110</y>
-      <width>41</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
@@ -299,12 +299,15 @@
   <widget class="QTableWidget" name="table">
    <property name="geometry">
     <rect>
-     <x>740</x>
+     <x>840</x>
      <y>410</y>
-     <width>401</width>
+     <width>511</width>
      <height>151</height>
     </rect>
    </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>140</number>
+   </attribute>
    <row>
     <property name="text">
      <string>1</string>
@@ -329,8 +332,8 @@
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>1190</x>
-     <y>420</y>
+     <x>1360</x>
+     <y>400</y>
      <width>201</width>
      <height>231</height>
     </rect>
@@ -467,8 +470,8 @@
     <rect>
      <x>310</x>
      <y>590</y>
-     <width>661</width>
-     <height>161</height>
+     <width>1041</width>
+     <height>191</height>
     </rect>
    </property>
    <property name="title">
@@ -479,7 +482,7 @@
      <rect>
       <x>20</x>
       <y>30</y>
-      <width>111</width>
+      <width>171</width>
       <height>21</height>
      </rect>
     </property>
@@ -490,9 +493,9 @@
    <widget class="QDoubleSpinBox" name="plate_thickness_h">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>190</x>
       <y>30</y>
-      <width>71</width>
+      <width>101</width>
       <height>22</height>
      </rect>
     </property>
@@ -517,7 +520,7 @@
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>111</width>
+      <width>171</width>
       <height>21</height>
      </rect>
     </property>
@@ -528,9 +531,9 @@
    <widget class="QDoubleSpinBox" name="layer_thickness_l">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>190</x>
       <y>70</y>
-      <width>71</width>
+      <width>101</width>
       <height>22</height>
      </rect>
     </property>
@@ -555,7 +558,7 @@
      <rect>
       <x>20</x>
       <y>110</y>
-      <width>111</width>
+      <width>161</width>
       <height>21</height>
      </rect>
     </property>
@@ -566,9 +569,9 @@
    <widget class="QSpinBox" name="number_of_layers_n">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>190</x>
       <y>110</y>
-      <width>71</width>
+      <width>101</width>
       <height>22</height>
      </rect>
     </property>
@@ -585,37 +588,52 @@
    <widget class="QLabel" name="label_12">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>20</y>
-      <width>141</width>
+      <x>340</x>
+      <y>10</y>
+      <width>251</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>ε'=ε0'+ε1exp(-z/(L/N))</string>
+     <string>ε'=ε0'+(ε1'-ε0')exp(-z/L)</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_13">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>20</y>
-      <width>141</width>
+      <x>600</x>
+      <y>10</y>
+      <width>221</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>ε''=ε0''+ε2exp(-z/(L/N))</string>
+     <string>ε''=ε0''+(ε1''-ε0'')exp(-z/L)</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>30</y>
+      <x>900</x>
+      <y>20</y>
       <width>111</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>ε=ε'+iε''</string>
@@ -624,9 +642,9 @@
    <widget class="QLabel" name="label_15">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>520</x>
       <y>70</y>
-      <width>21</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
@@ -637,14 +655,17 @@
    <widget class="QDoubleSpinBox" name="epsilon_0_shtrih">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>590</x>
       <y>70</y>
       <width>71</width>
       <height>22</height>
      </rect>
     </property>
     <property name="minimum">
-     <double>0.010000000000000</double>
+     <double>0.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>1000000.000000000000000</double>
     </property>
     <property name="value">
      <double>12.000000000000000</double>
@@ -653,38 +674,41 @@
    <widget class="QLabel" name="label_16">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>520</x>
       <y>110</y>
-      <width>21</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>ε1</string>
+     <string>ε1'</string>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="epsilon_1">
+   <widget class="QDoubleSpinBox" name="epsilon_1_shtrih">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>590</x>
       <y>110</y>
       <width>71</width>
       <height>22</height>
      </rect>
     </property>
     <property name="minimum">
-     <double>-100.000000000000000</double>
+     <double>0.010000000000000</double>
     </property>
     <property name="maximum">
-     <double>100.000000000000000</double>
+     <double>1000000.000000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.010000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="label_17">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>710</x>
       <y>70</y>
-      <width>21</width>
+      <width>51</width>
       <height>21</height>
      </rect>
     </property>
@@ -695,59 +719,136 @@
    <widget class="QDoubleSpinBox" name="epsilon_0_shtrih_shtrih">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>770</x>
       <y>70</y>
       <width>71</width>
       <height>22</height>
      </rect>
     </property>
     <property name="minimum">
-     <double>-100.000000000000000</double>
+     <double>0.000000000000000</double>
     </property>
     <property name="maximum">
-     <double>100.000000000000000</double>
+     <double>1000000.000000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.000000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="label_18">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>710</x>
       <y>110</y>
-      <width>21</width>
+      <width>61</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>ε2</string>
+     <string>ε1''</string>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="epsilon_2">
+   <widget class="QDoubleSpinBox" name="epsilon_1_shtrih_shtrih">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>770</x>
       <y>110</y>
       <width>71</width>
       <height>22</height>
      </rect>
     </property>
     <property name="minimum">
-     <double>-100.000000000000000</double>
+     <double>0.000000000000000</double>
     </property>
     <property name="maximum">
-     <double>100.000000000000000</double>
+     <double>1000000.000000000000000</double>
+    </property>
+    <property name="value">
+     <double>0.000000000000000</double>
     </property>
    </widget>
    <widget class="QPushButton" name="button_add_data">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>880</x>
       <y>70</y>
       <width>151</width>
-      <height>71</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
      <string>Add data to table</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="plot_special_graph">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>70</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Plot special graph</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_19">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>381</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>The number of L, where epsilon obeys the given law</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="number_of_L">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>150</y>
+      <width>71</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="value">
+     <number>3</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>152</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Angle</string>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="angle">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>150</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <double>1.570000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>0.100000000000000</double>
     </property>
    </widget>
   </widget>
