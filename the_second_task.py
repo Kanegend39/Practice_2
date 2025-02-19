@@ -65,8 +65,7 @@ def gaussian_beam_propagation_vector(left, right, step, z, w, d_i, epsilons, n):
     R_s = np.empty(k_x.shape, dtype='complex128')
     for i in range(len(k_x)):
         for j in range(len(k_y)):
-            alpha = k_x[i][j] / k0
-            result = matrix_method(f, epsilons, d_i, alpha, n)
+            result = matrix_method(f, epsilons, d_i, n, k_x[i][j], k_y[i][j])
             T_p[i][j], R_p[i][j], T_s[i][j], R_s[i][j] = result
 
     # GAUSSIAN BEAM AFTER THE INVERSE FOURIER TRANSFORM CONSIDERING ITS PASSAGE THROUGH THE PLATE #

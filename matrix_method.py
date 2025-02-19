@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def matrix_method(f, epsilons, d_i, alpha, n):
+def matrix_method(f, epsilons, d_i, n, k_x, k_y):
     n += 2
     n_i = np.arange(0, n, 1., dtype='complex64')
     N_i = np.arange(0, n, 1., dtype='complex64')
@@ -11,10 +11,9 @@ def matrix_method(f, epsilons, d_i, alpha, n):
     PHI_i = []
     c = 3 * 1e10
     k_0 = (2 * np.pi * f) / c
-    k_x = k_0 * alpha
     for i in range(n):
         n_i[i] = np.sqrt(epsilons[i], dtype='complex64')
-        N_i[i] = np.sqrt(epsilons[i] - ((k_x ** 2) / (k_0 ** 2)), dtype='complex64')
+        N_i[i] = np.sqrt(epsilons[i] - ((k_x ** 2 + k_y ** 2) / (k_0 ** 2)), dtype='complex64')
     for i in range(n - 2):
         phi_i[i] = np.exp(1j * N_i[i + 1] * k_0 * d_i[i], dtype='complex128')
         PHI_i.append(np.array([[phi_i[i], 0], [0, phi_i[i] ** (-1)]], dtype='complex128'))
